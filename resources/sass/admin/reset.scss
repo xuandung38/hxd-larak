@@ -1,0 +1,56 @@
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.wrapper {
+  width: 99vw;
+}
+
+.sidebar-mini .sidebar {
+  display: block;
+  font-weight: 200;
+  z-index: 2000;
+}
+
+.navbar-brand {
+  a {
+    font-weight: bold;
+    color: #454545;
+  }
+
+  a + a:before {
+    content: '→';
+    color: rgba(105, 105, 115, 1);
+    top: 1px;
+  }
+}
+
+.notification-message:hover {
+  background: green !important;
+}
+
+.sidebar .nav li > a {
+  border-radius: 0;
+}
+
+.main-panel {
+  overflow: auto !important;
+  height: 100% !important;
+}
+
+.logo {
+  width: 95%;
+}
+
+.sidebar-wrapper {
+  overflow-x: hidden;
+  overflow-y: auto !important;
+  max-height: 700px;
+}
+
+.el-header {
+  height: auto !important;
+}
+

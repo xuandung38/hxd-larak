@@ -1,0 +1,108 @@
+@import "variables";
+
+.login-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .left-side {
+    border-right: 1px solid rgb(132 129 126 / 67%);
+    padding: 20px;
+  }
+
+  .right-side {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: bold;
+    color: $login-form-title-color;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 2rem;
+    vertical-align: middle;
+
+    .logo {
+      width: 23px;
+      height: 23px;
+    }
+  }
+
+  .social-login {
+    width: 100%;
+    margin-top: 1.5rem;
+
+    .sns-item {
+      cursor: pointer;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      padding: 10px;
+
+      span {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        color: white !important;
+        padding: 3px;
+        text-align: center;
+        align-self: center;
+        margin: 0 5px;
+
+        &.facebook {
+          background: $facebook-color;
+        }
+
+        &.google {
+          background: $google-color;
+        }
+
+        &.twitter {
+          background: $twitter-color;
+        }
+
+        i {
+          font-size: 20px;
+        }
+      }
+
+    }
+
+  }
+
+  .text-box {
+    margin-bottom: 1.5rem;
+  }
+
+  .button-box {
+    .login-button {
+      width: 100%;
+    }
+  }
+
+  .guide-text {
+    margin: 2rem 0;
+    display: inline-flex;
+    width: 100%;
+
+    a {
+      color: $primary-color
+    }
+
+    .guide-left {
+      text-align: left;
+    }
+
+    .guide-right {
+      text-align: right;
+    }
+
+    .guide-left, .guide-right {
+      width: 50%;
+      display: inline-block;
+    }
+  }
+
+
+}

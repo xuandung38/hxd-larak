@@ -1,0 +1,33 @@
+.el-upload__input { // Fix when conflict with bootstrap
+  display: none !important;
+}
+
+.image-uploader {
+  margin-bottom: 10px;
+
+  .image-uploader__previewer {
+    width: 100px;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+
+    img {
+      width: 98px;
+      height: 98px;
+      object-fit: cover;
+      border: 1px solid lightgrey;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        border: 1px solid orangered;
+      }
+    }
+  }
+
+  .image-uploader__selector {
+    input[type="file"] {
+      display: none;
+    }
+  }
+}
