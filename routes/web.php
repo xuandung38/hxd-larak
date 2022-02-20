@@ -24,29 +24,29 @@ Route::get('/', function () {
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 
     Route::group(['prefix' => 'user', 'controller' => AutCtl\UserController::class], function () {
-        Route::get('/user/login', 'showLoginForm')->name('show_user_login_form');
-        Route::post('/user/login', 'login')->name('user_login');
-        Route::get('/user/logout', 'logout')->name('user_logout');
-        Route::get('/user/register', 'showRegisterForm')->name('show_user_register_form');
-        Route::post('/user/register', 'registerUser')->name('register_user');
-        Route::get('/user/verify-email/{token}', 'verifyEmail')->name('verify_user_email');
-        Route::get('/user/forget-password', 'showForgetPasswordForm')->name('show_user_forget_password_form');
-        Route::post('/user/forget-password', 'createResetPasswordToken')->name('create_user_reset_password_token');
-        Route::get('/user/reset-password/{token}', 'showResetPasswordForm')->name('show_user_reset_password_form');
-        Route::post('/user/reset-password/{token}', 'resetPassword')->name('reset_user_password');
-        Route::get('/user/password', 'password')->name('user_password');
-        Route::patch('/user/change-password', 'changePassword')->name('change_user_password');
+        Route::get('/login', 'showLoginForm')->name('show_user_login_form');
+        Route::post('/login', 'login')->name('user_login');
+        Route::get('/logout', 'logout')->name('user_logout');
+        Route::get('/register', 'showRegisterForm')->name('show_user_register_form');
+        Route::post('/register', 'registerUser')->name('register_user');
+        Route::get('/verify-email/{token}', 'verifyEmail')->name('verify_user_email');
+        Route::get('/forget-password', 'showForgetPasswordForm')->name('show_user_forget_password_form');
+        Route::post('/forget-password', 'createResetPasswordToken')->name('create_user_reset_password_token');
+        Route::get('/reset-password/{token}', 'showResetPasswordForm')->name('show_user_reset_password_form');
+        Route::post('/reset-password/{token}', 'resetPassword')->name('reset_user_password');
+        Route::get('/password', 'password')->name('user_password');
+        Route::patch('/change-password', 'changePassword')->name('change_user_password');
     });
 
-    Route::group(['prefix' => 'user', 'controller' => AutCtl\AdminController::class], function () {
-        Route::get('/admin/login', 'showLoginForm')->name('show_admin_login_form');
-        Route::post('/admin/login', 'login')->name('admin_login');
-        Route::get('/admin/logout', 'logout')->name('admin_logout');
-        Route::patch('/admin/change-password', 'changePassword')->name('change_admin_password');
-        Route::get('/admin/forget-password', 'showForgetPasswordForm')->name('show_admin_forget_password_form');
-        Route::post('/admin/forget-password', 'createResetPasswordToken')->name('create_admin_reset_password_token');
-        Route::get('/admin/reset-password/{token}', 'showResetPasswordForm')->name('show_admin_reset_password_form');
-        Route::post('/admin/reset-password/{token}', 'resetPassword')->name('reset_admin_password');
+    Route::group(['prefix' => 'admin', 'controller' => AutCtl\AdminController::class], function () {
+        Route::get('/login', 'showLoginForm')->name('show_admin_login_form');
+        Route::post('/login', 'login')->name('admin_login');
+        Route::get('/logout', 'logout')->name('admin_logout');
+        Route::patch('/change-password', 'changePassword')->name('change_admin_password');
+        Route::get('/forget-password', 'showForgetPasswordForm')->name('show_admin_forget_password_form');
+        Route::post('/forget-password', 'createResetPasswordToken')->name('create_admin_reset_password_token');
+        Route::get('/reset-password/{token}', 'showResetPasswordForm')->name('show_admin_reset_password_form');
+        Route::post('/reset-password/{token}', 'resetPassword')->name('reset_admin_password');
     });
 });
 
