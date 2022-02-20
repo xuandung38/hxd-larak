@@ -93,12 +93,6 @@ export default {
           label: 'Phân quyền',
           icon: 'accessibility',
         },
-        {
-          name: 'horizon.index',
-          route: this.route('horizon.index'),
-          label: 'Horizon',
-          icon: 'equalizer',
-        },
       ],
     };
   },

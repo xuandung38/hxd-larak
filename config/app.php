@@ -200,7 +200,7 @@ return [
 
 	'pagination' => 10,
 
-	'system_role_id' => env('SYSTEM_ROLE_ID'),
+	'system_role_id' => env('SYSTEM_ROLE_ID', 1),
 
 	'mix_url' => env('ASSET_URL'),
 

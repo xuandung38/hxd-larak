@@ -43,44 +43,6 @@
           show-word-limit
       ></el-input>
     </el-form-item>
-    <el-form-item label="Phòng ban">
-      <div>
-        <el-select
-            v-model="form.department_id"
-            :placeholder="$t('admin.common.select_role')"
-            clearable
-            filterable
-        >
-          <el-option
-              v-for="department in userDepartments"
-              :key="department.id"
-              :label="department.name"
-              :value="department.id"
-
-          >
-          </el-option>
-        </el-select>
-      </div>
-    </el-form-item>
-    <el-form-item :label="$t('admin.common.role')">
-      <div>
-        <el-select
-            v-model="form.position_id"
-            :placeholder="$t('admin.common.select_role')"
-            clearable
-            filterable
-        >
-          <el-option
-              v-for="position in userPositions"
-              :key="position.id"
-              :label="position.name"
-              :value="position.id"
-
-          >
-          </el-option>
-        </el-select>
-      </div>
-    </el-form-item>
     <el-form-item :label="$t('admin.common.image')">
       <ImageUploader
           :on-select="handleSelectImage"
@@ -124,18 +86,6 @@ export default {
       type: Function,
       default() {
         return null;
-      }
-    },
-    userDepartments: {
-      type: Array,
-      default() {
-        return [];
-      }
-    },
-    userPositions: {
-      type: Array,
-      default() {
-        return [];
       }
     },
   },

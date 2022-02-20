@@ -35,18 +35,6 @@
               prop="name"
               sortable>
           </el-table-column>
-          <el-table-column label="Phòng ban"
-                           prop="department_id" sortable>
-            <template slot-scope="scope">
-              {{ scope.row.department.name }}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Chức vụ">
-            <template slot-scope="scope">
-              {{ scope.row.position.name }}
-            </template>
-          </el-table-column>
 
           <el-table-column
               :label="$t('admin.common.phone')"

@@ -55,7 +55,7 @@
 <script src="{{ asset('js/vendor/material-dashboard.min.js') }}"></script>
 
 <!-- Editor -->
-<script src="{{ asset('vendor/ckeditor/editor.js') }}"></script>
+<script src="{{ asset('vendor/ckeditor/ckeditor.js') }}"></script>
 
 <!-- App -->
 <script src="{{ mix('js/admin_app.js') }}" defer></script>

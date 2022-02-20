@@ -6,8 +6,6 @@ use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreUserRequest;
 use App\Http\Requests\Admin\User\UpdateUserRequest;
-use App\Models\Department;
-use App\Models\Position;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Contracts\View\Factory;
@@ -45,8 +43,6 @@ class UserController extends Controller
 
 		return view('admin.screens.users', [
 			'users' => $this->_userService->searchUser($request->all()),
-			'departments' => Department::select('id', 'name')->get(),
-			'positions' => Position::select('id', 'name')->get(),
 			'keyword' => $request->input('search', ''),
 		]);
 	}

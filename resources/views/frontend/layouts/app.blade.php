@@ -11,7 +11,7 @@
     <!-- Locale -->
     <meta name="locale" content="{{ app()->getLocale() }}">
 
-    <title>{{ config('app.name') }} Administrator System</title>
+    <title>{{ config('app.name') }}</title>
 
     <link rel="icon" type="image/png" href="{{asset('images/favicon.png')}}">
 

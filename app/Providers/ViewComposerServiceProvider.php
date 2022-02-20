@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\Admin as AdminCPS;
-use App\Http\ViewComposers\Auth\AuthViewComposer;
 use App\Http\ViewComposers\Frontend as Frontend;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,7 +31,5 @@ class ViewComposerServiceProvider extends ServiceProvider
 		view()->composer(['admin.screens.posts'], AdminCPS\PostComposer::class);
 		view()->composer(['admin.screens.setting'], AdminCPS\SettingComposer::class);
 		view()->composer(['admin.screens.roles'], AdminCPS\RoleComposer::class);
-		view()->composer('admin.screens.departments', AdminCPS\DepartmentComposer::class);
-		view()->composer('admin.screens.positions', AdminCPS\PositionComposer::class);
 	}
 }

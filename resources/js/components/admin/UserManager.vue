@@ -58,18 +58,6 @@
               prop="phone"
               sortable>
           </el-table-column>
-
-          <el-table-column label="Phòng">
-            <template slot-scope="scope">
-              {{ scope.row.department.name }}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Chức vụ">
-            <template slot-scope="scope">
-              {{ scope.row.position.name }}
-            </template>
-          </el-table-column>
           <el-table-column
               :label="$t('admin.common.action')"
               fixed="right">
@@ -123,8 +111,6 @@
             :on-cancel="hideForm"
             :on-success="onSuccess"
             :target="target"
-            :user-departments="departments"
-            :user-positions="positions"
         ></user-form>
       </el-dialog>
       <delete-confirm-dialog
@@ -148,18 +134,6 @@ export default {
       type: Object,
       default() {
         return {};
-      }
-    },
-    departments: {
-      type: Array,
-      default() {
-        return [];
-      }
-    },
-    positions: {
-      type: Array,
-      default() {
-        return [];
       }
     },
     user: {

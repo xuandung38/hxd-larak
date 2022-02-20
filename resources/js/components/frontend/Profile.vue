@@ -12,13 +12,10 @@
               <div class="box-center">
                 <el-avatar :size="100" :src="user.image" fit="fit" shape="circle">
                   <div>Hello</div>
-                  {{ user.department.name }}
                 </el-avatar>
               </div>
               <div class="box-center">
                 <div class="user-name text-center">{{ user.name }}</div>
-                <div class="user-role text-center">{{ user.position.name }}</div>
-                <div class="user-role text-center"><strong>{{ user.department.name }}</strong></div>
               </div>
             </div>
           </el-card>
