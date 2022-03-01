@@ -207,15 +207,17 @@ if (!function_exists('random_unique_key')) {
 	}
 }
 
+
 if (!function_exists('query_by_cols')) {
 	function query_by_cols(Builder $query, array $cols = [], array $params = []): Builder
 	{
 		foreach ($cols as $col) {
 			if (!empty($params[$col])) {
-				$query->where($col, $params[$col]);
+				$query = $query->where(function ($query) use ($params, $col) {
+					return $query->where($col, $params[$col]);
+				});
 			}
 		}
-
 		return $query;
 	}
 }
@@ -223,9 +225,11 @@ if (!function_exists('query_by_cols')) {
 if (!function_exists('search_by_cols')) {
 	function search_by_cols(Builder $query, $value, array $cols = []): Builder
 	{
-		foreach ($cols as $col) {
-			$query->orWhere($col, 'like', '%' . $value . '%');
-		}
+		$query->where(function ($query) use ($value, $cols) {
+			foreach ($cols as $col) {
+				$query->orWhere($col, 'like', '%' . $value . '%');
+			}
+		});
 
 		return $query;
 	}
