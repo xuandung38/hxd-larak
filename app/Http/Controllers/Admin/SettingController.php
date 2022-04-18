@@ -13,33 +13,43 @@ use Illuminate\View\View;
 
 class SettingController extends Controller
 {
-	/**
-	 * @return Factory|View
-	 */
-	public function index()
-	{
-		if (Gate::denies(Permissions::SETTING)) {
-			return abort(403, 'Không có quyền');
-		}
+    /**
+     * @return Factory|View
+     */
+    public function index()
+    {
+        if (Gate::denies(Permissions::SETTING)) {
+            return abort(403, 'Không có quyền');
+        }
 
-		return view('admin.screens.setting', [
-			'setting' => Setting::first(),
-		]);
-	}
+        $settings = Setting::all();
 
-	/**
-	 * @param Setting              $setting
-	 * @param UpdateSettingRequest $request
-	 *
-	 * @return JsonResponse
-	 */
-	public function update(Setting $setting, UpdateSettingRequest $request)
-	{
-		if (Gate::denies(Permissions::SETTING)) {
-			return abort(403, 'Không có quyền');
-		}
+        $arrSettings = [];
+        foreach ($settings as $setting) {
+            $arrSettings[$setting->key] = $setting->value;
+        }
 
-		$setting->update($request->parameters());
-		return response()->json($setting);
-	}
+        return view('admin.screens.setting', [
+            'setting' => $arrSettings,
+        ]);
+    }
+
+    /**
+     * @param Setting              $setting
+     * @param UpdateSettingRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function update(UpdateSettingRequest $request)
+    {
+        if (Gate::denies(Permissions::SETTING)) {
+            return abort(403, 'Không có quyền');
+        }
+        $settings = $request->parameters() ?? [];
+
+        foreach ($settings as $key => $setting) {
+            Setting::where('key', $key)->update(['value' => $setting]);
+        }
+        return response()->json($settings);
+    }
 }

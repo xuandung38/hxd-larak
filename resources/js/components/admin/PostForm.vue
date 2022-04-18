@@ -43,11 +43,11 @@
         </el-input>
       </el-form-item>
       <el-form-item :label="$t('admin.common.content')">
-        <editor
+        <vue-editor
+            id="edit_msg"
             v-model="form.content"
-            :apiKey="tinyApiKey"
-            :init="tinyOption"
-        ></editor>
+        >
+        </vue-editor>
       </el-form-item>
       <el-form-item :label="$t('admin.common.custom_page')">
         <el-switch
@@ -79,10 +79,10 @@
 </template>
 <script>
 import ImageUploader from "../common/ImageUploader";
-import Editor from '@tinymce/tinymce-vue';
+import {VueEditor} from "vue2-editor";
 
 export default {
-  components: {ImageUploader, Editor},
+  components: {ImageUploader, VueEditor},
   props: {
     onSuccess: {
       type: Function,
@@ -102,7 +102,7 @@ export default {
         return {};
       }
     },
-    user: {
+    admin: {
       type: Object,
       default() {
         return {};
@@ -115,25 +115,6 @@ export default {
       mode: '',
       isSearching: false,
       categories: [],
-      tinyApiKey: 'vmdl1buhrn76d792t8hky0i8lavmvsosod9upr98zbbphns7',
-      tinyOption: {
-        height: 300,
-        menubar: false,
-        statusbar: false,
-        plugins: [
-          'advlist autolink lists link image charmap',
-          'searchreplace visualblocks code fullscreen',
-          'print preview anchor insertdatetime media',
-          'paste code help wordcount table'
-        ],
-        font_formats: `Arial=arial,helvetica,sans-serif;
-                    Courier New=courier new,courier;
-                    Helvetica=helvetica;
-                    Impact=impact,chicago;
-                    Tahoma=tahoma,arial,helvetica,sans-serif;`,
-        toolbar: 'undo redo | formatselect | fontselect | forecolor backcolor | bold italic | alignleft aligncenter alignright',
-        content_style: ``
-      }
     }
   },
   created() {

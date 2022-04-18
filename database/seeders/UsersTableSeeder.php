@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		for ($i = 1; $i <= 50; $i++) {
+		for ($i = 1; $i <= 10; $i++) {
 			$user = User::factory()->make([
 				'image' => '/images/user/user' . rand(1, 8) . '.jpg',
 				'username' => uniqid()

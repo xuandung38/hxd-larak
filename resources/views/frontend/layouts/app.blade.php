@@ -11,7 +11,7 @@
     <!-- Locale -->
     <meta name="locale" content="{{ app()->getLocale() }}">
 
-    <title>{{ config('app.name') }}</title>
+    <title>{{ site_setting('name') }}</title>
 
     <link rel="icon" type="image/png" href="{{asset('images/favicon.png')}}">
 
@@ -22,7 +22,7 @@
     <link href="{{ asset('css/vendor/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/vendor/material-dashboard.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/vendor/element-ui.min.css') }}" rel="stylesheet">
-    <link href="{{ mix('css/admin_app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/auth_app.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -54,9 +54,6 @@
 <script src="{{ asset('js/vendor/material-kit.min.js') }}"></script>
 <script src="{{ asset('js/vendor/perfect-scrollbar.min.js') }}"></script>
 <script src="{{ asset('js/vendor/material-dashboard.min.js') }}"></script>
-
-<!-- Editor -->
-{{--<script src="{{ asset('vendor/ckeditor/ckeditor.js') }}"></script>--}}
 
 
 <!-- App -->

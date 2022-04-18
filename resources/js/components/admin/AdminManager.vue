@@ -137,7 +137,7 @@ export default {
         return [];
       }
     },
-    user: {
+    curentAdmin: {
       type: Object,
       default() {
         return {};
@@ -152,7 +152,7 @@ export default {
       isShowForm: false,
       target: {},
       formTitle: '',
-      adminLevel: this.getRoleLevel(this.user.roles),
+      adminLevel: this.getRoleLevel(this.curentAdmin.roles),
     }
   },
   methods: {
@@ -184,7 +184,7 @@ export default {
       return level;
     },
     canEdit(record) {
-      if (this.user.id === record.id) {
+      if (this.curentAdmin.id === record.id) {
         return true;
       }
       const level = this.getRoleLevel(record.roles);

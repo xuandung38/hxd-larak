@@ -160,11 +160,18 @@ return [
 		'avatar' => 'Ảnh đại diện',
 		'filter' => 'Lọc',
 		'gender' => 'Giới tính',
-		'album' => 'Album ảnh'
+		'album' => 'Album ảnh',
+		'sell_price' => 'Giá bán',
+		'buy_price' => 'Giá mua',
+		'min_buy' => 'Mua tối thiểu',
+		'max_buy' => 'Mua tối đa',
+		'payment_status' => 'Trạng thái thanh toán',
+		'handle_order' => 'Xử lý đơn hàng'
 
 	],
 	'message' => [
-		'confirm_delete_message' => 'Bạn chắc chắn? Thao tác sẽ không thể khôi phục.',
+		'confirm_delete_message' => 'Bạn chắc chắn xoá? Thao tác sẽ không thể khôi phục.',
+		'confirm_update_message' => 'Bạn chắc chắn cập nhật? Thao tác sẽ không thể khôi phục.',
 		'warning_not_save_current_edit' => 'Bạn chưa lưu dữ liệu đang chỉnh sửa.',
 		'enter_id_or_name_to_search' => 'Nhập id hoặc tên để tìm kiếm',
 		'enter_serial_to_search' => 'Nhập serial để tìm kiếm',

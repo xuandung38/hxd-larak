@@ -13,7 +13,6 @@
         "ziggy": "php artisan route:clear && php artisan ziggy:generate resources/js/plugins/ziggy.js"
     },
     "dependencies": {
-        "@tinymce/tinymce-vue": "^3.2.6",
         "axios": "^0.21",
         "chart.js": "^2.9.4",
         "ckeditor-wordcount-plugin": "^1.17.9",

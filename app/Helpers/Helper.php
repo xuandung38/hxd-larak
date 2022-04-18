@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Role;
+use App\Models\Setting;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -259,4 +260,11 @@ if (!function_exists('binding_meta_seo')) {
 
 		return $meta;
 	}
+}
+
+if(!function_exists('site_setting')){
+    function site_setting(string $key){
+      $setting =  Setting::where('key',$key)->first();
+      return $setting?->value;
+    }
 }

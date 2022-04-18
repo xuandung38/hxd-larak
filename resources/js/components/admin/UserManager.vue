@@ -136,7 +136,7 @@ export default {
         return {};
       }
     },
-    user: {
+    admin: {
       type: Object,
       default() {
         return {};

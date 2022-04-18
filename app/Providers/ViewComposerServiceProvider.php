@@ -22,6 +22,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
 
 		// Admin
+		// view()->composer(['admin.layouts.*'], AdminCPS\IndexComposer::class);
 		view()->composer(['admin.screens.*'], AdminCPS\IndexComposer::class);
 		view()->composer(['admin.screens.admins'], AdminCPS\AdminComposer::class);
 		view()->composer(['admin.screens.files'], AdminCPS\FileComposer::class);

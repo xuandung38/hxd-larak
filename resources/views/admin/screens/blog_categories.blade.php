@@ -2,7 +2,7 @@
 @section('content')
     <blog-category-manager
             :categories="{{ $categories->toJson() }}"
-            :user="{{ $_user->toJson()}}"
+            :admin="{{ $_admin->toJson()}}"
             :keyword="{{ json_encode($keyword) }}"
     ></blog-category-manager>
 

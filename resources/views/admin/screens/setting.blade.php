@@ -2,7 +2,7 @@
 @section('content')
     <setting-manager
             :setting="{{ json_encode($setting) }}"
-            :user="{{ json_encode($_user) }}"
+            :admin="{{ json_encode($_admin) }}"
     ></setting-manager>
 
 @endsection

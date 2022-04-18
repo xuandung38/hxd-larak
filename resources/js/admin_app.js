@@ -5,7 +5,6 @@ import ElementUILocale from 'element-ui/lib/locale/lang/vi'
 import i18n from './plugins/i18n';
 import Helper from './plugins/helper';
 import Request from './plugins/request';
-import Editor from './plugins/editor';
 import Router from './plugins/router';
 import {adminStore} from './stores/adminStore';
 import VueLodash from 'vue-lodash';
@@ -16,7 +15,6 @@ Vue.use(Vuex);
 Vue.use(VueLodash, {lodash: lodash});
 
 Vue.prototype.Request = Request;
-Vue.prototype.Editor = Editor;
 Vue.prototype.Helper = Helper;
 
 Vue.mixin({

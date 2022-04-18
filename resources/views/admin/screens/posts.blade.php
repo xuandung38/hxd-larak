@@ -2,7 +2,7 @@
 @section('content')
     <post-manager
             :posts="{{ json_encode($posts) }}"
-            :user="{{ json_encode($_user) }}"
+            :admin="{{ json_encode($_admin) }}"
             :keyword="{{ json_encode($keyword) }}"
     ></post-manager>
 @endsection

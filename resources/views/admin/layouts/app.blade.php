@@ -29,7 +29,7 @@
 @include('admin.layouts.preloader')
 <div class="wrapper" id="app">
     <side-bar
-            :user="{{ json_encode($_user) }}"
+            :admin="{{ json_encode($_admin) }}"
             :system-role-id="{{ config('app.system_role_id') }}"
             :active-route="{{ json_encode($_activeRoute) }}"
     >
@@ -53,9 +53,6 @@
 <script src="{{ asset('js/vendor/material-kit.min.js') }}"></script>
 <script src="{{ asset('js/vendor/perfect-scrollbar.min.js') }}"></script>
 <script src="{{ asset('js/vendor/material-dashboard.min.js') }}"></script>
-
-<!-- Editor -->
-<script src="{{ asset('vendor/ckeditor/ckeditor.js') }}"></script>
 
 <!-- App -->
 <script src="{{ mix('js/admin_app.js') }}" defer></script>

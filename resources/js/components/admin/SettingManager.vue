@@ -93,30 +93,29 @@
               ></el-input>
             </el-form-item>
 
-            <el-form-item label="Instagram">
-              <el-input v-model="form.instagram"></el-input>
-            </el-form-item>
-
             <el-form-item label="Facebook">
               <el-input v-model="form.facebook"></el-input>
-            </el-form-item>
-
-            <el-form-item label="Youtube">
-              <el-input v-model="form.youtube"></el-input>
             </el-form-item>
 
             <el-form-item label="Twitter">
               <el-input v-model="form.twitter"></el-input>
             </el-form-item>
 
-            <el-form-item label="Spotify">
-              <el-input v-model="form.spotify"></el-input>
+            <el-form-item label="Youtube">
+              <el-input v-model="form.youtube"></el-input>
             </el-form-item>
 
-            <el-form-item label="Soundcloud">
-              <el-input v-model="form.soundcloud"></el-input>
+            <el-form-item label="Telegram">
+              <el-input v-model="form.telegram"></el-input>
             </el-form-item>
 
+            <el-form-item label="Thông báo trang chủ">
+              <vue-editor
+                  id="notification"
+                  v-model="form.notification"
+              >
+              </vue-editor>
+            </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="Slider">
             <div class="row">
@@ -170,9 +169,10 @@
 </template>
 <script>
 import ImageUploader from "../common/ImageUploader";
+import {VueEditor} from "vue2-editor";
 
 export default {
-  components: {ImageUploader},
+  components: {ImageUploader, VueEditor},
   props: {
     user: {
       Type: Object,
@@ -233,7 +233,7 @@ export default {
       });
       try {
         this.form.slider = this.slider;
-        const uri = this.route('admin.ajax_update_setting', {setting: this.form.id});
+        const uri = this.route('admin.ajax_update_setting');
         await this.Request.patch(uri, this.form);
         this.$notify({
           type: 'success',
@@ -250,7 +250,8 @@ export default {
         });
       }
       loading.close();
-    }
+    },
+
   },
 
 }

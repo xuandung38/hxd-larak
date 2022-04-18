@@ -17,11 +17,10 @@ class IndexComposer
 	public function compose(View $view)
 	{
 		$adminRoles = Role::whereGuard('admin')->get();
-		$admin = admin();
 
 		$view->with([
-			'_user' => $admin,
-			'_availableRoles' => admin_available_roles($admin, $adminRoles),
+			'_admin' => admin(),
+			'_availableRoles' => admin_available_roles(admin(), $adminRoles),
 			'_adminRoles' => $adminRoles,
 			'_notifications' => []
 		]);

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('content')
     <user-manager
-            :user="{{ json_encode($_user) }}"
+            :admin="{{ json_encode($_admin) }}"
             :users="{{ $users->toJSon() }}"
     ></user-manager>
 @endsection

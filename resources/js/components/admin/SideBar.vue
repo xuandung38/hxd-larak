@@ -8,10 +8,10 @@
     <div class="sidebar-wrapper">
       <div class="user">
         <div class="photo">
-          <img :alt="user.name" :src="user.image"/>
+          <img :alt="admin.name" :src="admin.image"/>
         </div>
         <div class="info text-middle">
-          <a :href="this.route('admin.profile')"><span>{{ user.name }}</span></a>
+          <a :href="this.route('admin.profile')"><span>{{ admin.name }}</span></a>
         </div>
       </div>
       <ul class="nav">
@@ -37,7 +37,7 @@
 <script>
 export default {
   props: {
-    user: {
+    admin: {
       Type: Object,
       default() {
         return {};
@@ -58,7 +58,7 @@ export default {
         {
           name: 'admin.users_index',
           route: this.route('admin.users_index'),
-          label: 'Nhân Viên',
+          label: 'Người dùng',
           icon: 'people',
         },
         {
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     hasRole(roleId) {
-      const role = this._.find(this.user.roles, role => role.id.toString() === roleId.toString());
+      const role = this._.find(this.admin.roles, role => role.id.toString() === roleId.toString());
       return !this._.isEmpty(role);
     },
 

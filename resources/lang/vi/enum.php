@@ -25,27 +25,30 @@ return [
 		'category' => 'Danh mục sản phẩm',
 	],
 
-	'rent_status' => [
-		'canceled' => 'Đã hủy',
-		'finished' => 'Thành công',
-		'pending' => 'Đang chờ player',
-		'processing' => 'Đang thực hiện',
-		'denied' => 'Bị từ chối',
-		'closed' => 'Hết hạn phản hồi',
-	],
-
-	'transaction_status' => [
+	'order_status' => [
 		'error' => 'Lỗi',
 		'success' => 'Thành công',
 		'pending' => 'Chờ chuyển khoản',
-		'waiting' => 'Chờ duyệt',
+		'processing' => 'Đang thực hiện',
 		'cancel' => 'Hủy bỏ',
 	],
+
+	'transaction_type' => [
+		'buy' => 'Mua',
+		'sell' => 'Bán',
+	],
+
+	'payment_status' => [
+		'unpaid' => 'Chưa thanh toán',
+		'paid' => 'Đã thanh toán',
+		'refund' => 'Hoàn Tiền',
+	],
+
 	'withdrawal_status' => [
 		'error' => 'Lỗi',
 		'success' => 'Thành công',
-		'wait_handle' => 'Chờ duyệt',
-		'wait_confirm' => 'Chờ xác nhận',
+		'waiting' => 'Chờ duyệt',
+		'pending' => 'Chờ xác nhận',
 		'cancel' => 'Hủy bỏ',
 	],
 
