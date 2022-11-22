@@ -35,9 +35,8 @@ class SettingController extends Controller
     }
 
     /**
-     * @param Setting              $setting
-     * @param UpdateSettingRequest $request
-     *
+     * @param  Setting  $setting
+     * @param  UpdateSettingRequest  $request
      * @return JsonResponse
      */
     public function update(UpdateSettingRequest $request)
@@ -50,6 +49,7 @@ class SettingController extends Controller
         foreach ($settings as $key => $setting) {
             Setting::where('key', $key)->update(['value' => $setting]);
         }
+
         return response()->json($settings);
     }
 }

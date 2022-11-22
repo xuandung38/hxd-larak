@@ -28,14 +28,13 @@ class BaseRequest extends FormRequest
         ];
     }
 
-
-	/**
-	 * Prepare parameters from Form Request.
-	 *
-	 * @return array
-	 */
-	public function parameters()
-	{
-		return $this->except(['_token', '_method']);
-	}
+    /**
+     * Prepare parameters from Form Request.
+     *
+     * @return array
+     */
+    public function parameters()
+    {
+        return $this->except(['_token', '_method']);
+    }
 }

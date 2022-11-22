@@ -14,45 +14,41 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-	private $_userService;
+    private $_userService;
 
-	public function __construct(UserService $userService)
-	{
-		$this->_userService = $userService;
-	}
+    public function __construct(UserService $userService)
+    {
+        $this->_userService = $userService;
+    }
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return Application|Factory|View
-	 */
-	public function profile(Request $request)
-	{
-		return view('frontend.screens.profile');
-	}
+    /**
+     * @param  Request  $request
+     * @return Application|Factory|View
+     */
+    public function profile(Request $request)
+    {
+        return view('frontend.screens.profile');
+    }
 
-	/**
-	 * @param UpdateProfileRequest $request
-	 *
-	 * @return JsonResponse
-	 */
-	public function updateProfile(UpdateProfileRequest $request)
-	{
-		$this->_userService->updateUser(user(), $request->parameters());
+    /**
+     * @param  UpdateProfileRequest  $request
+     * @return JsonResponse
+     */
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+        $this->_userService->updateUser(user(), $request->parameters());
 
-		return response()->json(['success' => true]);
-	}
+        return response()->json(['success' => true]);
+    }
 
-	/**
-	 * @param ChangePasswordRequest $request
-	 *
-	 * @return JsonResponse
-	 */
-	public function updatePassword(ChangePasswordRequest $request)
-	{
-		$this->_userService->updateUser(user(), $request->parameters());
+    /**
+     * @param  ChangePasswordRequest  $request
+     * @return JsonResponse
+     */
+    public function updatePassword(ChangePasswordRequest $request)
+    {
+        $this->_userService->updateUser(user(), $request->parameters());
 
-		return response()->json(['success' => true]);
-	}
-
+        return response()->json(['success' => true]);
+    }
 }

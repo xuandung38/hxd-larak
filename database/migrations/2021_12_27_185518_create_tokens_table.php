@@ -4,18 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+return new class() extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::create('tokens', function (Blueprint $table) {
-			$table->id();
-			$table->unsignedBigInteger('user_id')->nullable();
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tokens', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->dateTime('expired_at');
             $table->string('token')->unique();

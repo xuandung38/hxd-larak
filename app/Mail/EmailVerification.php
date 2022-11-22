@@ -10,9 +10,11 @@ use Illuminate\Queue\SerializesModels;
 
 class EmailVerification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     protected $user;
+
     protected $userVerification;
 
     /**
@@ -34,9 +36,9 @@ class EmailVerification extends Mailable
      */
     public function build()
     {
-	    return $this->view('emails.email_verification', [
-		    'user' => $this->user,
-		    'userVerification' => $this->userVerification,
-	    ])->subject('Xác thực tài khoản - ' . config('app.name'));
+        return $this->view('emails.email_verification', [
+            'user' => $this->user,
+            'userVerification' => $this->userVerification,
+        ])->subject('Xác thực tài khoản - '.config('app.name'));
     }
 }

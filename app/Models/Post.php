@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read BlogCategory $category
+ *
  * @method static Builder|Post newModelQuery()
  * @method static Builder|Post newQuery()
  * @method static Builder|Post query()
@@ -43,13 +44,13 @@ class Post extends Model
 {
     use SlugBindingTrait;
 
-    /** @var string $table */
+    /** @var string */
     protected $table = 'posts';
 
-    /** @var array $hidden */
+    /** @var array */
     protected $hidden = [];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'blog_category_id',
         'name',
@@ -67,5 +68,4 @@ class Post extends Model
     {
         return $this->belongsTo(BlogCategory::class, 'blog_category_id');
     }
-
 }

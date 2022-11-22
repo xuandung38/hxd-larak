@@ -34,6 +34,7 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @property-read BlogCategory|null $parentCategory
  * @property-read \Illuminate\Database\Eloquent\Collection|Post[] $posts
  * @property-read int|null $posts_count
+ *
  * @method static Builder|BlogCategory d()
  * @method static QueryBuilder|BlogCategory newModelQuery()
  * @method static QueryBuilder|BlogCategory newQuery()
@@ -50,9 +51,12 @@ use Kalnoy\Nestedset\QueryBuilder;
  * @method static Builder|BlogCategory whereUpdatedAt($value)
  * @method static Builder|BlogCategory with(...$relations)
  * @mixin Eloquent
+ *
  * @method static Collection|static[] all($columns = ['*'])
  * @method static Collection|static[] get($columns = ['*'])
+ *
  * @property string $description
+ *
  * @method static Builder|BlogCategory whereDescription($value)
  */
 class BlogCategory extends Model
@@ -60,13 +64,13 @@ class BlogCategory extends Model
     use NodeTrait;
     use SlugBindingTrait;
 
-    /** @var string $table */
+    /** @var string */
     protected $table = 'blog_categories';
 
-    /** @var array $hidden */
+    /** @var array */
     protected $hidden = [];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'name',
         'description',
@@ -101,5 +105,4 @@ class BlogCategory extends Model
     {
         return $this->hasMany(self::class, 'id', 'parent_id');
     }
-
 }

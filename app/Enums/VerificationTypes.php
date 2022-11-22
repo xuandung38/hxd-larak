@@ -10,6 +10,7 @@ use BenSampo\Enum\Enum;
  */
 final class VerificationTypes extends Enum
 {
-	const EMAIL = 1;
-	const RESET_PASSWORD = 2;
+    public const EMAIL = 1;
+
+    public const RESET_PASSWORD = 2;
 }

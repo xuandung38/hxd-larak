@@ -6,11 +6,10 @@ use App\Http\Requests\BaseRequest;
 
 class StoreBlogCategoryRequest extends BaseRequest
 {
-	public function rules()
-	{
-		return array_merge(parent::rules(), [
-			'name' => 'required|max:255',
-		]);
-	}
-
+    public function rules()
+    {
+        return array_merge(parent::rules(), [
+            'name' => 'required|max:255',
+        ]);
+    }
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  * App\Models\Role
  *
  * @method static create(array $attributes)
+ *
  * @property int $id
  * @property string $name
  * @property string $guard
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $permissions_count
  * @property-read Collection|User[] $users
  * @property-read int|null $users_count
+ *
  * @method static Builder|Role newModelQuery()
  * @method static Builder|Role newQuery()
  * @method static Builder|Role query()
@@ -36,13 +38,13 @@ use Illuminate\Support\Carbon;
  */
 class Role extends Model
 {
-    /** @var string $table */
+    /** @var string */
     protected $table = 'roles';
 
-    /** @var array $hidden */
+    /** @var array */
     protected $hidden = [];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'name',
         'guard',
@@ -63,5 +65,4 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class, 'role_permission');
     }
-
 }

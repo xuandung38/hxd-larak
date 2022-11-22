@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models\Traits;
 
 use DateTimeInterface;

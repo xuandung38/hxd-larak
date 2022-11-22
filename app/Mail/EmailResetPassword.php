@@ -11,18 +11,21 @@ use Illuminate\Queue\SerializesModels;
 
 class EmailResetPassword extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     protected $user;
+
     protected $token;
+
     protected $guard;
 
     /**
      * Create a new message instance.
      *
-     * @param Token $token
-     * @param User|Admin $user
-     * @param string $guard
+     * @param  Token  $token
+     * @param  User|Admin  $user
+     * @param  string  $guard
      */
     public function __construct(Token $token, $user, $guard = 'user')
     {
@@ -38,10 +41,10 @@ class EmailResetPassword extends Mailable
      */
     public function build()
     {
-	    return $this->view('emails.reset_password', [
-		    'user' => $this->user,
-		    'token' => $this->token->token,
-		    'guard' => $this->guard,
-	    ])->subject('Đặt lại mật khẩu - ' . config('app.name'));
+        return $this->view('emails.reset_password', [
+            'user' => $this->user,
+            'token' => $this->token->token,
+            'guard' => $this->guard,
+        ])->subject('Đặt lại mật khẩu - '.config('app.name'));
     }
 }

@@ -11,47 +11,42 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-
 class ProfileController extends Controller
 {
-	private $adminService;
+    private $adminService;
 
-	public function __construct(AdminService $userService)
-	{
-		$this->adminService = $userService;
-	}
+    public function __construct(AdminService $userService)
+    {
+        $this->adminService = $userService;
+    }
 
-	/**
-	 * @return Application|Factory|View
-	 */
-	public function profile()
-	{
-		return view('admin.screens.profile');
-	}
+    /**
+     * @return Application|Factory|View
+     */
+    public function profile()
+    {
+        return view('admin.screens.profile');
+    }
 
-	/**
-	 * @param UpdateProfileRequest $request
-	 *
-	 * @return JsonResponse
-	 */
-	public function updateProfile(UpdateProfileRequest $request)
-	{
-		$this->adminService->updateAdmin(admin(), $request->parameters());
+    /**
+     * @param  UpdateProfileRequest  $request
+     * @return JsonResponse
+     */
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+        $this->adminService->updateAdmin(admin(), $request->parameters());
 
-		return response()->json(['success' => true]);
-	}
+        return response()->json(['success' => true]);
+    }
 
+    /**
+     * @param  ChangePasswordRequest  $request
+     * @return JsonResponse
+     */
+    public function updatePassword(ChangePasswordRequest $request)
+    {
+        $this->adminService->updateAdmin(admin(), $request->parameters());
 
-	/**
-	 * @param ChangePasswordRequest $request
-	 *
-	 * @return JsonResponse
-	 */
-	public function updatePassword(ChangePasswordRequest $request)
-	{
-		$this->adminService->updateAdmin(admin(), $request->parameters());
-
-		return response()->json(['success' => true]);
-	}
-
+        return response()->json(['success' => true]);
+    }
 }

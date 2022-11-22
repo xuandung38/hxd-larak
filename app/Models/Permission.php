@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Collection|Role[] $roles
  * @property-read int|null $roles_count
+ *
  * @method static Builder|Permission newModelQuery()
  * @method static Builder|Permission newQuery()
  * @method static Builder|Permission query()
@@ -26,20 +27,21 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Permission whereName($value)
  * @method static Builder|Permission whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property int $key
+ *
  * @method static Builder|Permission whereKey($value)
  * @method static where(string $string, $getValue)
  */
-
 class Permission extends Model
 {
-    /** @var string $table */
+    /** @var string */
     protected $table = 'permissions';
 
-    /** @var array $hidden */
+    /** @var array */
     protected $hidden = [];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'key',
         'name',
@@ -53,5 +55,4 @@ class Permission extends Model
     {
         return $this->belongsToMany(Role::class, 'role_permission');
     }
-
 }

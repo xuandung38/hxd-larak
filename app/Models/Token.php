@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -22,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $admin_id
  * @property-read Admin|null $admin
  * @property-read User|null $user
+ *
  * @method static Builder|Token newModelQuery()
  * @method static Builder|Token newQuery()
  * @method static Builder|Token query()
@@ -36,19 +35,19 @@ use Illuminate\Support\Carbon;
  */
 class Token extends Model
 {
-    /** @var string $table */
+    /** @var string */
     protected $table = 'tokens';
 
-    /** @var array $hidden */
+    /** @var array */
     protected $hidden = [];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'user_id',
         'admin_id',
         'expired_at',
         'token',
-        'verification_type'
+        'verification_type',
     ];
 
     /**
@@ -67,7 +66,6 @@ class Token extends Model
         return $this->belongsTo(Admin::class);
     }
 
-
     /**
      * @return bool
      */
@@ -75,17 +73,16 @@ class Token extends Model
     {
         $now = strtotime(now());
         $expired = strtotime($this->expired_at);
+
         return $now > $expired;
     }
 
     /**
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return Model|null
      */
-    public function resolveRouteBinding($value, $field = NULL): ?Model
+    public function resolveRouteBinding($value, $field = null): ?Model
     {
         return $this->whereToken($value)->first();
     }
-
 }

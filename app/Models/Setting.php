@@ -2,25 +2,20 @@
 
 namespace App\Models;
 
-use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-
 
 class Setting extends Model
 {
-    /** @var string $table */
+    /** @var string */
     protected $table = 'settings';
 
-    /** @var array $hidden */
+    /** @var array */
     protected $hidden = [];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'key',
         'value',
         'status',
     ];
-
 }

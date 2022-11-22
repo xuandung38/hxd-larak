@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Enums\Queues;
@@ -27,195 +28,183 @@ use Illuminate\View\View;
 
 class AdminController extends Controller
 {
+    use AuthenticatesUsers;
 
-	use AuthenticatesUsers;
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/admin';
 
-	/**
-	 * Where to redirect users after login.
-	 *
-	 * @var string
-	 */
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware([
+            'guest:admin',
+        ])->except('logout');
+    }
 
-	protected $redirectTo = '/admin';
+    /**
+     * @return Guard|StatefulGuard
+     */
+    public function guard()
+    {
+        return Auth::guard('admin');
+    }
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        $field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
+            ? $this->username()
+            : 'username';
 
-	public function __construct()
-	{
-		$this->middleware([
-			'guest:admin',
-		])->except('logout');
-	}
+        return [
+            $field => $request->get($this->username()),
+            'password' => $request->password,
+        ];
+    }
 
-	/**
-	 * @return Guard|StatefulGuard
-	 */
-	public function guard()
-	{
-		return Auth::guard('admin');
-	}
+    /**
+     * @param  Request  $request
+     * @return Application|Factory|View
+     */
+    public function showLoginForm(Request $request)
+    {
+        return view('auth.index', [
+            'guard' => 'admin',
+            'screen' => 'login',
+            'title' => trans('dashboard.login'),
+            'redirect' => $request->input('redirect', ''),
+        ]);
+    }
 
-	/**
-	 * Get the needed authorization credentials from the request.
-	 *
-	 * @param Request $request
-	 *
-	 * @return array
-	 */
-	protected function credentials(Request $request)
-	{
-		$field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
-			? $this->username()
-			: 'username';
-		return [
-			$field => $request->get($this->username()),
-			'password' => $request->password,
-		];
-	}
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|RedirectResponse|mixed
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return Application|Factory|View
-	 */
-	public function showLoginForm(Request $request)
-	{
-		return view('auth.index', [
-			'guard' => 'admin',
-			'screen' => 'login',
-			'title' => trans('dashboard.login'),
-			'redirect' => $request->input('redirect', '')
-		]);
-	}
+        $this->clearLoginAttempts($request);
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return JsonResponse|RedirectResponse|mixed
-	 */
-	protected function sendLoginResponse(Request $request)
-	{
-		$request->session()->regenerate();
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'user' => $this->guard()->user(),
+            ]);
+        }
 
-		$this->clearLoginAttempts($request);
+        return $this->authenticated($request, $this->guard()->user())
+            ?: redirect()->intended($this->redirectTo);
+    }
 
-		if ($request->ajax() || $request->wantsJson()) {
-			return response()->json([
-				'success' => true,
-				'user' => $this->guard()->user(),
-			]);
-		}
+    /**
+     * @param  Request  $request
+     * @return Application|RedirectResponse|Redirector|mixed
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-		return $this->authenticated($request, $this->guard()->user())
-			?: redirect()->intended($this->redirectTo);
-	}
+        return $this->loggedOut($request) ?: redirect(route('auth.show_admin_login_form'));
+    }
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return Application|RedirectResponse|Redirector|mixed
-	 */
-	public function logout(Request $request)
-	{
-		$this->guard()->logout();
-		$request->session()->invalidate();
-		$request->session()->regenerateToken();
+    /**
+     * @return Factory|View
+     */
+    public function showForgetPasswordForm()
+    {
+        return view('auth.index', [
+            'guard' => 'admin',
+            'screen' => 'forget',
+            'title' => trans('dashboard.forget_password'),
+        ]);
+    }
 
-		return $this->loggedOut($request) ?: redirect(route('auth.show_admin_login_form'));
-	}
+    /**
+     * @param  ForgetAdminPasswordRequest  $request
+     * @return JsonResponse|void
+     */
+    public function createResetPasswordToken(ForgetAdminPasswordRequest $request)
+    {
+        try {
+            $admin = Admin::whereEmail($request->input('email'))->first();
+            $token = new Token([
+                'admin_id' => $admin->id,
+                'expired_at' => now()->addHours(3),
+                'token' => Str::random(20).uniqid(),
+                'verification_type' => VerificationTypes::RESET_PASSWORD,
+            ]);
+            $token->save();
+            SendResetPasswordMail::dispatch($token, $admin, 'admin')->onQueue(Queues::HIGH);
 
-	/**
-	 * @return Factory|View
-	 */
-	public function showForgetPasswordForm()
-	{
-		return view('auth.index', [
-			'guard' => 'admin',
-			'screen' => 'forget',
-			'title' => trans('dashboard.forget_password'),
-		]);
-	}
+            return response()->json(['success' => true]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
 
-	/**
-	 * @param ForgetAdminPasswordRequest $request
-	 *
-	 * @return JsonResponse|void
-	 */
-	public function createResetPasswordToken(ForgetAdminPasswordRequest $request)
-	{
-		try {
-			$admin = Admin::whereEmail($request->input('email'))->first();
-			$token = new Token([
-				'admin_id' => $admin->id,
-				'expired_at' => now()->addHours(3),
-				'token' => Str::random(20) . uniqid(),
-				'verification_type' => VerificationTypes::RESET_PASSWORD,
-			]);
-			$token->save();
-			SendResetPasswordMail::dispatch($token, $admin, 'admin')->onQueue(Queues::HIGH);
+        abort(404);
+    }
 
-			return response()->json(['success' => true]);
+    /**
+     * @param  Token  $token
+     * @return Factory|View
+     */
+    public function showResetPasswordForm(Token $token)
+    {
+        if ($token->isExpired()
+            || $token->verification_type !== VerificationTypes::RESET_PASSWORD
+            || $token->admin_id === null
+        ) {
+            abort(403);
+        }
 
-		} catch (Exception $e) {
-			Log::error($e->getMessage());
-		}
+        return view('auth.index', [
+            'guard' => 'admin',
+            'screen' => 'reset',
+            'token' => $token->token,
+            'title' => trans('dashboard.reset_password'),
+            'redirect' => route('admin.index'),
+        ]);
+    }
 
-		abort(404);
+    /**
+     * @param  Token  $token
+     * @param  ResetPasswordRequest  $request
+     * @return RedirectResponse|Redirector
+     */
+    public function resetPassword(Token $token, ResetPasswordRequest $request)
+    {
+        if ($token->isExpired()
+            || $token->verification_type !== VerificationTypes::RESET_PASSWORD
+            || $token->admin_id === null
+        ) {
+            abort(403);
+        }
 
-	}
+        $admin = $token->admin()->first();
 
-	/**
-	 * @param Token $token
-	 *
-	 * @return Factory|View
-	 */
-	public function showResetPasswordForm(Token $token)
-	{
-		if ($token->isExpired()
-			|| $token->verification_type !== VerificationTypes::RESET_PASSWORD
-			|| $token->admin_id === null
-		) {
-			abort(403);
-		}
+        DB::transaction(function () use ($admin, $request, $token) {
+            $admin->update($request->parameters());
+            $token->delete();
+        });
 
-		return view('auth.index', [
-			'guard' => 'admin',
-			'screen' => 'reset',
-			'token' => $token->token,
-			'title' => trans('dashboard.reset_password'),
-			'redirect' => route('admin.index')
-		]);
-	}
+        $this->guard()->login($admin);
 
-	/**
-	 * @param Token                $token
-	 * @param ResetPasswordRequest $request
-	 *
-	 * @return RedirectResponse|Redirector
-	 */
-	public function resetPassword(Token $token, ResetPasswordRequest $request)
-	{
-		if ($token->isExpired()
-			|| $token->verification_type !== VerificationTypes::RESET_PASSWORD
-			|| $token->admin_id === null
-		) {
-			abort(403);
-		}
-
-		$admin = $token->admin()->first();
-
-		DB::transaction(function () use ($admin, $request, $token) {
-			$admin->update($request->parameters());
-			$token->delete();
-		});
-
-		$this->guard()->login($admin);
-
-		return redirect(route('admin.index'));
-	}
-
+        return redirect(route('admin.index'));
+    }
 }

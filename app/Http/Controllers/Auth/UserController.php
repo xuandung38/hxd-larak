@@ -12,7 +12,6 @@ use App\Jobs\SendResetPasswordMail;
 use App\Models\Token;
 use App\Models\User;
 use App\Services\UserService;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -29,292 +28,279 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-	use AuthenticatesUsers;
+    use AuthenticatesUsers;
 
-	protected $userService;
+    protected $userService;
 
-	/**
-	 * Where to redirect users after login.
-	 *
-	 * @var string
-	 */
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/message';
 
-	protected $redirectTo = '/message';
+    /**
+     * Create a new controller instance.
+     *
+     * @param  UserService  $userService
+     */
+    public function __construct(UserService $userService)
+    {
+        $this->middleware([
+            'guest:user',
+        ])->except('logout');
 
+        $this->userService = $userService;
+    }
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @param UserService $userService
-	 */
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        $field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
+            ? $this->username()
+            : 'username';
 
-	public function __construct(UserService $userService)
-	{
-		$this->middleware([
-			'guest:user',
-		])->except('logout');
+        return [
+            $field => $request->get($this->username()),
+            'password' => $request->password,
+        ];
+    }
 
-		$this->userService = $userService;
-	}
+    /**
+     * @param  Request  $request
+     * @return Factory|View
+     */
+    public function showLoginForm(Request $request)
+    {
+        return view('auth.index', [
+            'guard' => 'user',
+            'screen' => 'login',
+            'title' => trans('dashboard.login'),
+            'redirect' => $request->input('redirect', ''),
+        ]);
+    }
 
-	/**
-	 * Get the needed authorization credentials from the request.
-	 *
-	 * @param Request $request
-	 *
-	 * @return array
-	 */
-	protected function credentials(Request $request)
-	{
-		$field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
-			? $this->username()
-			: 'username';
-		return [
-			$field => $request->get($this->username()),
-			'password' => $request->password,
-		];
-	}
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return Factory|View
-	 */
-	public function showLoginForm(Request $request)
-	{
-		return view('auth.index', [
-			'guard' => 'user',
-			'screen' => 'login',
-			'title' => trans('dashboard.login'),
-			'redirect' => $request->input('redirect', '')
-		]);
-	}
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
 
-	public function login(Request $request)
-	{
-		$this->validateLogin($request);
+            return $this->sendLockoutResponse($request);
+        }
 
-		// If the class is using the ThrottlesLogins trait, we can automatically throttle
-		// the login attempts for this application. We'll key this by the username and
-		// the IP address of the client making these requests into this application.
-		if (method_exists($this, 'hasTooManyLoginAttempts') &&
-			$this->hasTooManyLoginAttempts($request)) {
-			$this->fireLockoutEvent($request);
+        if ($this->attemptLogin($request)) {
+            $user = $this->guard()->user();
 
-			return $this->sendLockoutResponse($request);
-		}
+            if (! $user->hasVerifiedEmail()) {
+                $this->guard()->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
 
-		if ($this->attemptLogin($request)) {
-			$user = $this->guard()->user();
+                return response(json_encode([
+                    'error' => 'Vui lòng xác thực tài khoản bằng email.',
+                    'csrf_token' => csrf_token(),
+                ]), 422);
+            }
 
-			if (!$user->hasVerifiedEmail()) {
-				$this->guard()->logout();
-				$request->session()->invalidate();
-				$request->session()->regenerateToken();
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', time());
+            }
+            $user->update([
+                'last_login' => today(),
+            ]);
 
-				return response(json_encode([
-					'error' => 'Vui lòng xác thực tài khoản bằng email.',
-					'csrf_token' => csrf_token()
-				]), 422);
-			}
+            return $this->sendLoginResponse($request);
+        }
 
-			if ($request->hasSession()) {
-				$request->session()->put('auth.password_confirmed_at', time());
-			}
-			$user->update([
-				'last_login' => today()
-			]);
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
 
-			return $this->sendLoginResponse($request);
-		}
+        return $this->sendFailedLoginResponse($request);
+    }
 
-		// If the login attempt was unsuccessful we will increment the number of attempts
-		// to login and redirect the user back to the login form. Of course, when this
-		// user surpasses their maximum number of attempts they will get locked out.
-		$this->incrementLoginAttempts($request);
+    /**
+     * @return mixed
+     */
+    public function guard()
+    {
+        return Auth::guard('user');
+    }
 
-		return $this->sendFailedLoginResponse($request);
-	}
+    /**
+     * @param  Request  $request
+     * @return Response
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
 
-	/**
-	 * @return mixed
-	 */
-	public function guard()
-	{
-		return Auth::guard('user');
-	}
+        $this->clearLoginAttempts($request);
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return Response
-	 */
-	protected function sendLoginResponse(Request $request)
-	{
-		$request->session()->regenerate();
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
 
-		$this->clearLoginAttempts($request);
+        return $this->authenticated($request, $this->guard()->user())
+            ?: redirect()->intended($this->redirectPath());
+    }
 
-		if ($request->ajax() || $request->wantsJson()) {
-			return response()->json(['success' => true]);
-		}
+    /**
+     * @param  Request  $request
+     * @return RedirectResponse|Redirector
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
 
-		return $this->authenticated($request, $this->guard()->user())
-			?: redirect()->intended($this->redirectPath());
-	}
+        $request->session()->invalidate();
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return RedirectResponse|Redirector
-	 */
-	public function logout(Request $request)
-	{
-		$this->guard()->logout();
+        $request->session()->regenerateToken();
 
-		$request->session()->invalidate();
+        return $this->loggedOut($request) ?: redirect(route('index'));
+    }
 
-		$request->session()->regenerateToken();
+    /**
+     * @return Factory|View
+     */
+    public function showRegisterForm()
+    {
+        return view('auth.index', [
+            'guard' => 'user',
+            'screen' => 'register',
+            'title' => trans('dashboard.register'),
+        ]);
+    }
 
-		return $this->loggedOut($request) ?: redirect(route('index'));
-	}
+    /**
+     * @param  RegisterUserRequest  $request
+     * @param  UserService  $userService
+     * @return JsonResponse
+     */
+    public function registerUser(RegisterUserRequest $request, UserService $userService)
+    {
+        $user = $userService->createUser($request->parameters());
+        // $this->guard()->login($user);
 
-	/**
-	 * @return Factory|View
-	 */
-	public function showRegisterForm()
-	{
-		return view('auth.index', [
-			'guard' => 'user',
-			'screen' => 'register',
-			'title' => trans('dashboard.register')
-		]);
-	}
+        return response()->json([
+            'success' => true,
+            'user' => $user,
+        ]);
+    }
 
-	/**
-	 * @param RegisterUserRequest $request
-	 * @param UserService         $userService
-	 *
-	 * @return JsonResponse
-	 */
-	public function registerUser(RegisterUserRequest $request, UserService $userService)
-	{
-		$user = $userService->createUser($request->parameters());
-		// $this->guard()->login($user);
+    /**
+     * @return Factory|View
+     */
+    public function showForgetPasswordForm()
+    {
+        return view('auth.index', [
+            'guard' => 'user',
+            'screen' => 'forget',
+            'title' => trans('dashboard.forget_password'),
+        ]);
+    }
 
-		return response()->json([
-			'success' => true,
-			'user' => $user,
-		]);
-	}
+    /**
+     * @param  ForgetUserPasswordRequest  $request
+     * @return JsonResponse|void
+     */
+    public function createResetPasswordToken(ForgetUserPasswordRequest $request)
+    {
+        try {
+            $user = User::whereEmail($request->input('email'))->first();
+            $token = new Token([
+                'user_id' => $user->id,
+                'expired_at' => now()->addHours(3),
+                'token' => Str::random(20).uniqid(),
+                'verification_type' => VerificationTypes::RESET_PASSWORD,
+            ]);
+            $token->save();
+            SendResetPasswordMail::dispatch($token, $user, 'user')->onQueue(Queues::HIGH);
 
+            return response()->json(['success' => true]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
 
-	/**
-	 * @return Factory|View
-	 */
-	public function showForgetPasswordForm()
-	{
-		return view('auth.index', [
-			'guard' => 'user',
-			'screen' => 'forget',
-			'title' => trans('dashboard.forget_password')
-		]);
-	}
+        abort(404);
+    }
 
-	/**
-	 * @param ForgetUserPasswordRequest $request
-	 *
-	 * @return JsonResponse|void
-	 */
-	public function createResetPasswordToken(ForgetUserPasswordRequest $request)
-	{
-		try {
-			$user = User::whereEmail($request->input('email'))->first();
-			$token = new Token([
-				'user_id' => $user->id,
-				'expired_at' => now()->addHours(3),
-				'token' => Str::random(20) . uniqid(),
-				'verification_type' => VerificationTypes::RESET_PASSWORD,
-			]);
-			$token->save();
-			SendResetPasswordMail::dispatch($token, $user, 'user')->onQueue(Queues::HIGH);
+    /**
+     * @param  Token  $token
+     * @return RedirectResponse|Redirector
+     */
+    public function verifyEmail(Token $token)
+    {
+        if ($token->isExpired() || $token->verification_type !== VerificationTypes::EMAIL) {
+            abort(403);
+        }
 
-			return response()->json(['success' => true]);
-		} catch (Exception $e) {
-			Log::error($e->getMessage());
-		}
+        $user = $token->user()->first();
 
-		abort(404);
-	}
+        if ($user === null) {
+            abort(404);
+        }
 
-	/**
-	 * @param Token $token
-	 *
-	 * @return RedirectResponse|Redirector
-	 */
-	public function verifyEmail(Token $token)
-	{
-		if ($token->isExpired() || $token->verification_type !== VerificationTypes::EMAIL) {
-			abort(403);
-		}
+        $user->email_verified_at = now();
+        $user->save();
+        $this->guard()->login($user);
 
-		$user = $token->user()->first();
+        return redirect(route('index'));
+    }
 
-		if ($user === null) {
-			abort(404);
-		}
+    /**
+     * @param  Token  $token
+     * @return Factory|View
+     */
+    public function showResetPasswordForm(Token $token)
+    {
+        if ($token->isExpired() || $token->verification_type !== VerificationTypes::RESET_PASSWORD) {
+            abort(403);
+        }
 
-		$user->email_verified_at = now();
-		$user->save();
-		$this->guard()->login($user);
+        return view('auth.index', [
+            'guard' => 'user',
+            'screen' => 'reset',
+            'token' => $token->token,
+            'title' => trans('dashboard.reset_password'),
+        ]);
+    }
 
-		return redirect(route('index'));
-	}
+    /**
+     * @param  Token  $token
+     * @param  ResetPasswordRequest  $request
+     * @return RedirectResponse|Redirector
+     */
+    public function resetPassword(Token $token, ResetPasswordRequest $request)
+    {
+        if ($token->isExpired()
+            || $token->verification_type !== VerificationTypes::RESET_PASSWORD
+            || $token->user_id === null
+        ) {
+            abort(403);
+        }
 
-	/**
-	 * @param Token $token
-	 *
-	 * @return Factory|View
-	 */
-	public function showResetPasswordForm(Token $token)
-	{
-		if ($token->isExpired() || $token->verification_type !== VerificationTypes::RESET_PASSWORD) {
-			abort(403);
-		}
+        $user = $token->user()->first();
 
-		return view('auth.index', [
-			'guard' => 'user',
-			'screen' => 'reset',
-			'token' => $token->token,
-			'title' => trans('dashboard.reset_password')
-		]);
-	}
+        DB::transaction(function () use ($user, $request, $token) {
+            $user->update($request->parameters());
+            $token->delete();
+        });
 
-	/**
-	 * @param Token                $token
-	 * @param ResetPasswordRequest $request
-	 *
-	 * @return RedirectResponse|Redirector
-	 */
-	public function resetPassword(Token $token, ResetPasswordRequest $request)
-	{
-		if ($token->isExpired()
-			|| $token->verification_type !== VerificationTypes::RESET_PASSWORD
-			|| $token->user_id === null
-		) {
-			abort(403);
-		}
+        $this->guard()->login($user);
 
-		$user = $token->user()->first();
-
-		DB::transaction(function () use ($user, $request, $token) {
-			$user->update($request->parameters());
-			$token->delete();
-		});
-
-		$this->guard()->login($user);
-
-		return redirect(route('index'));
-	}
-
+        return redirect(route('index'));
+    }
 }

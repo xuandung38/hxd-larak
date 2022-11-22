@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\File;
 
-use App\Http\Requests\BaseRequest;
 use App\Enums\FileExtensions;
+use App\Http\Requests\BaseRequest;
 
 class UploadFileRequest extends BaseRequest
 {
@@ -38,7 +38,7 @@ class UploadFileRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'upload' => 'File'
+            'upload' => 'File',
         ];
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin as AdminCtl;
-use App\Http\Controllers\User as UserCtl;
 use App\Http\Controllers\Auth as AutCtl;
+use App\Http\Controllers\User as UserCtl;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +22,6 @@ Route::get('/', function () {
 
 // Auth
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-
     Route::group(['prefix' => 'user', 'controller' => AutCtl\UserController::class], function () {
         Route::get('/login', 'showLoginForm')->name('show_user_login_form');
         Route::post('/login', 'login')->name('user_login');
@@ -58,7 +57,6 @@ Route::group(['middleware' => ['auth:user']], function () {
 
 // Player area
 Route::group(['as' => 'user.', 'middleware' => ['auth:user']], function () {
-
     //Profile
     Route::group(['controller' => UserCtl\ProfileController::class], function () {
         Route::get('/profile', 'profile')->name('profile');
@@ -69,7 +67,6 @@ Route::group(['as' => 'user.', 'middleware' => ['auth:user']], function () {
 
 // Admin area
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admin']], function () {
-
     Route::get('/', [App\Http\Controllers\Admin\IndexController::class, 'index'])->name('index');
 
     // Profile
@@ -112,7 +109,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admi
 
 // System admin area
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admin', 'authorize.system_admin']], function () {
-
     //System
     Route::group(['controller' => AdminCtl\SettingController::class], function () {
         Route::get('/setting', 'index')->name('setting_index');

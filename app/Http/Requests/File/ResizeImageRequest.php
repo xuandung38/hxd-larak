@@ -14,5 +14,4 @@ class ResizeImageRequest extends BaseRequest
             'height' => 'required|integer|min:1',
         ]);
     }
-
 }

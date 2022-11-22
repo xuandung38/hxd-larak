@@ -9,13 +9,11 @@ use Illuminate\Routing\Redirector;
 
 class IndexController extends Controller
 {
-
-	/**
-	 * @return Application|RedirectResponse|Redirector
-	 */
-	public function index()
-	{
-		return redirect(route('admin.profile'));
-	}
-
+    /**
+     * @return Application|RedirectResponse|Redirector
+     */
+    public function index()
+    {
+        return redirect(route('admin.profile'));
+    }
 }

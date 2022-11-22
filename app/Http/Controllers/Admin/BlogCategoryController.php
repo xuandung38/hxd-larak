@@ -16,87 +16,87 @@ use Illuminate\View\View;
 
 class BlogCategoryController extends Controller
 {
-	/** @var BlogCategoryService */
-	protected $_categoryService;
+    /** @var BlogCategoryService */
+    protected $_categoryService;
 
-	/**
-	 * ProdCategoryController constructor.
-	 *
-	 * @param BlogCategoryService $categoryService
-	 */
-	public function __construct(BlogCategoryService $categoryService)
-	{
-		$this->_categoryService = $categoryService;
-	}
+    /**
+     * ProdCategoryController constructor.
+     *
+     * @param  BlogCategoryService  $categoryService
+     */
+    public function __construct(BlogCategoryService $categoryService)
+    {
+        $this->_categoryService = $categoryService;
+    }
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return Application|Factory|View|void
-	 */
-	public function index(Request $request)
-	{
-		if (Gate::denies(Permissions::VIEW_BLOG_CATEGORY)) {
-			return abort(403, 'Không có quyền');
-		}
+    /**
+     * @param  Request  $request
+     * @return Application|Factory|View|void
+     */
+    public function index(Request $request)
+    {
+        if (Gate::denies(Permissions::VIEW_BLOG_CATEGORY)) {
+            return abort(403, 'Không có quyền');
+        }
 
-		$search = $request->input('search', '');
-		return view('admin.screens.blog_categories', [
-			'categories' => $this->_categoryService->searchCategory($request->all()),
-			'keyword' => $search
-		]);
-	}
+        $search = $request->input('search', '');
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return JsonResponse|void
-	 */
-	public function search(Request $request)
-	{
-		if (Gate::denies(Permissions::VIEW_BLOG_CATEGORY)) {
-			return abort(403, 'Không có quyền');
-		}
-		return response()->json($this->_categoryService->searchCategory($request->all()));
-	}
+        return view('admin.screens.blog_categories', [
+            'categories' => $this->_categoryService->searchCategory($request->all()),
+            'keyword' => $search,
+        ]);
+    }
 
-	/**
-	 * @param StoreBlogCategoryRequest $request
-	 *
-	 * @return JsonResponse|void
-	 */
-	public function store(StoreBlogCategoryRequest $request)
-	{
-		if (Gate::denies(Permissions::EDIT_BLOG_CATEGORY)) {
-			return abort(403, 'Không có quyền');
-		}
-		return response()->json($this->_categoryService->createCategory($request->parameters()));
-	}
+    /**
+     * @param  Request  $request
+     * @return JsonResponse|void
+     */
+    public function search(Request $request)
+    {
+        if (Gate::denies(Permissions::VIEW_BLOG_CATEGORY)) {
+            return abort(403, 'Không có quyền');
+        }
 
-	/**
-	 * @param BlogCategory             $category
-	 * @param StoreBlogCategoryRequest $request
-	 *
-	 * @return JsonResponse|void
-	 */
-	public function update(BlogCategory $category, StoreBlogCategoryRequest $request)
-	{
-		if (Gate::denies(Permissions::EDIT_BLOG_CATEGORY)) {
-			return abort(403, 'Không có quyền');
-		}
-		return response()->json($this->_categoryService->updateCategory($category, $request->parameters()));
-	}
+        return response()->json($this->_categoryService->searchCategory($request->all()));
+    }
 
-	/**
-	 * @param BlogCategory $category
-	 *
-	 * @return JsonResponse|void
-	 */
-	public function delete(BlogCategory $category)
-	{
-		if (Gate::denies(Permissions::DELETE_BLOG_CATEGORY)) {
-			return abort(403, 'Không có quyền');
-		}
-		return response()->json($this->_categoryService->deleteCategory($category));
-	}
+    /**
+     * @param  StoreBlogCategoryRequest  $request
+     * @return JsonResponse|void
+     */
+    public function store(StoreBlogCategoryRequest $request)
+    {
+        if (Gate::denies(Permissions::EDIT_BLOG_CATEGORY)) {
+            return abort(403, 'Không có quyền');
+        }
+
+        return response()->json($this->_categoryService->createCategory($request->parameters()));
+    }
+
+    /**
+     * @param  BlogCategory  $category
+     * @param  StoreBlogCategoryRequest  $request
+     * @return JsonResponse|void
+     */
+    public function update(BlogCategory $category, StoreBlogCategoryRequest $request)
+    {
+        if (Gate::denies(Permissions::EDIT_BLOG_CATEGORY)) {
+            return abort(403, 'Không có quyền');
+        }
+
+        return response()->json($this->_categoryService->updateCategory($category, $request->parameters()));
+    }
+
+    /**
+     * @param  BlogCategory  $category
+     * @return JsonResponse|void
+     */
+    public function delete(BlogCategory $category)
+    {
+        if (Gate::denies(Permissions::DELETE_BLOG_CATEGORY)) {
+            return abort(403, 'Không có quyền');
+        }
+
+        return response()->json($this->_categoryService->deleteCategory($category));
+    }
 }

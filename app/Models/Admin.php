@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null
  *                $notifications_count
+ *
  * @method static Builder|Admin newModelQuery()
  * @method static Builder|Admin newQuery()
  * @method static Builder|Admin query()
@@ -49,6 +50,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Admin whereRememberToken($value)
  * @method static Builder|Admin whereRole($value)
  * @method static Builder|Admin whereUpdatedAt($value)
+ *
  * @property-read Collection|Role[] $roles
  * @property-read int|null $roles_count
  * @property-read Collection|Token[] $verifications
@@ -57,7 +59,8 @@ use Illuminate\Support\Carbon;
  */
 class Admin extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, DateTimeFormatTrait;
+    use Notifiable;
+    use DateTimeFormatTrait;
 
     /** @var string */
     protected $guard = 'admin';
@@ -66,7 +69,6 @@ class Admin extends Authenticatable implements MustVerifyEmail
     protected $table = 'admins';
 
     /** @var array */
-
     protected $hidden = [
         'password',
         'remember_token',
@@ -77,7 +79,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    /** @var array $fillable */
+    /** @var array */
     protected $fillable = [
         'name',
         'username',
@@ -105,10 +107,8 @@ class Admin extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Token::class);
     }
 
-
     /**
      * @param $permissionKey
-     *
      * @return bool
      */
     public function canDo($permissionKey)
@@ -126,14 +126,12 @@ class Admin extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
-
     /**
-     * @param mixed $value
-     * @param null $field
-     *
+     * @param  mixed  $value
+     * @param  null  $field
      * @return Model|null
      */
-    public function resolveRouteBinding($value, $field = NULL): ?Model
+    public function resolveRouteBinding($value, $field = null): ?Model
     {
         return is_numeric($value)
             ? static::whereId($value)->first()

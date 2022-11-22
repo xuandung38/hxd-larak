@@ -11,7 +11,9 @@ use BenSampo\Enum\Enum;
  */
 final class Queues extends Enum
 {
-	const DEFAULT = 'default';
-	const HIGH = 'high';
-	const LOW = 'low';
+    public const DEFAULT = 'default';
+
+    public const HIGH = 'high';
+
+    public const LOW = 'low';
 }

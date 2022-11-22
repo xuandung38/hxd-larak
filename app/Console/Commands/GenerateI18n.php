@@ -30,14 +30,14 @@ class GenerateI18n extends Command
     {
         $targetDirectory = ltrim(rtrim($this->argument('path')));
 
-        if (!file_exists($targetDirectory)) {
+        if (! file_exists($targetDirectory)) {
             mkdir($targetDirectory);
         }
 
         $locales = array_diff(scandir(base_path('lang')), ['..', '.']);
 
         foreach ($locales as $locale) {
-            $files = array_diff(scandir(base_path('lang/' . $locale)), ['..', '.']);
+            $files = array_diff(scandir(base_path('lang/'.$locale)), ['..', '.']);
             app()->setLocale($locale);
             $messages = [];
 
