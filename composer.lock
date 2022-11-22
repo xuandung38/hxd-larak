@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb4f16811d34a21c774ed968206037f6",
+    "content-hash": "8dc1568e6e60b3f5310c8415d5dbc809",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6704,55 +6704,6 @@
                 }
             ],
             "time": "2022-03-02T12:58:14+00:00"
-        },
-        {
-            "name": "thainph/i18n-generator",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.com/thainph/i18n-generator.git",
-                "reference": "bbdb68c182d40b92de7890d7691c1fc1ced698e7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/thainph%2Fi18n-generator/repository/archive.zip?sha=bbdb68c182d40b92de7890d7691c1fc1ced698e7",
-                "reference": "bbdb68c182d40b92de7890d7691c1fc1ced698e7",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Thainph\\I18nGenerator\\I18nGeneratorServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Thainph\\I18nGenerator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "ThaiNPH",
-                    "email": "thai.nph@papay.vn"
-                }
-            ],
-            "description": "I18n generator for Laravel",
-            "keywords": [
-                "i18n generator",
-                "i18n laravel",
-                "laravel localization",
-                "thainph"
-            ],
-            "support": {
-                "issues": "https://gitlab.com/api/v4/projects/23180946/issues"
-            },
-            "time": "2021-10-14T23:53:58+00:00"
         },
         {
             "name": "tightenco/ziggy",

@@ -29,7 +29,6 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
-        "thainph/i18n-generator": "^1.0",
         "tightenco/ziggy": "^1.4"
     },
     "require-dev": {
