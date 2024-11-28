@@ -170,7 +170,7 @@ return [
          * Package Service Providers...
          */
 
-        HXD\Filemanager\FileManagerServiceProvider::class,
+        Thainph\Filemanager\FileManagerServiceProvider::class,
         App\Providers\ViewComposerServiceProvider::class,
 
         /*
